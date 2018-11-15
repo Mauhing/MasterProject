@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+prosses=${1:-4} 
+
+mpirun -n $prosses python boundary_mpi.py

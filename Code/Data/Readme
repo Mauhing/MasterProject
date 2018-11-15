@@ -1,0 +1,7 @@
+This fold contain histogram with spec:
+
+np= 200000
+nb= 50000
+H= 10
+dt=1
+
