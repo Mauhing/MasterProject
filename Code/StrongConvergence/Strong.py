@@ -59,14 +59,84 @@ def step_e(z,H,dt,dW,w=0):
     temp=np.where(temp>H, 2*H-temp,temp)
     return temp
 #%%
-    
-def get_error():
-    Tend=100
+def get_tranjectory():
+    TimeEnd=10000
     jump=np.array([1,2,4,8,16,32]) 
     Nt=100*jump[-1]
     
-    TArray=np.linspace(0,Tend,Nt)
-    dt=TArray[1]-TArray[0]
+    TimeArray=np.linspace(0,TimeEnd,Nt)
+    dt=TimeArray[1]-TimeArray[0]
+    dW=np.random.normal(0,dt,Nt)
+    Wiener=np.cumsum(dW)
+    
+    ZE1=np.zeros(len(dW))
+    ZE2=np.zeros(int(len(dW)/2))
+    ZE4=np.zeros(int(len(dW)/4))
+    ZE8=np.zeros(int(len(dW)/8))
+    ZE16=np.zeros(int(len(dW)/16))
+    ZE32=np.zeros(int(len(dW)/32))
+    
+    ZM1=np.zeros(len(dW))
+    ZM2=np.zeros(int(len(dW)/2))
+    ZM4=np.zeros(int(len(dW)/4))
+    ZM8=np.zeros(int(len(dW)/8))
+    ZM16=np.zeros(int(len(dW)/16))
+    ZM32=np.zeros(int(len(dW)/32))
+   
+    ZE1[0]=17
+    ZE2[0]=17
+    ZE4[0]=17
+    ZE8[0]=17
+    ZE16[0]=17
+    ZE32[0]=17
+    
+    ZM1[0]=17
+    ZM2[0]=17
+    ZM4[0]=17
+    ZM8[0]=17
+    ZM16[0]=17
+    ZM32[0]=17
+    
+    for i in range (1,len(ZE1)):
+        dW=Wiener[i*jump[0]]-Wiener[(i-1)*jump[0]]
+        ZE1[i]=step_e(ZE1[i-1],H,dt,dW)
+        ZM1[i]=step_m(ZM1[i-1],H,dt,dW)
+    
+    for i in range (1,len(ZE2)):
+        dW=Wiener[i*jump[1]]-Wiener[(i-1)*jump[1]]
+        ZE2[i]=step_e(ZE2[i-1],H,dt*jump[1],dW)
+        ZM2[i]=step_m(ZM2[i-1],H,dt*jump[1],dW)
+        
+    for i in range (1,len(ZE4)):
+        dW=Wiener[i*jump[2]]-Wiener[(i-1)*jump[2]]
+        ZE4[i]=step_e(ZE4[i-1],H,dt*jump[2],dW)
+        ZM4[i]=step_m(ZM4[i-1],H,dt*jump[2],dW)
+    
+    for i in range (1,len(ZE8)):
+        dW=Wiener[i*jump[3]]-Wiener[(i-1)*jump[3]]
+        ZE8[i]=step_e(ZE8[i-1],H,dt*jump[3],dW)
+        ZM8[i]=step_m(ZM8[i-1],H,dt*jump[3],dW)
+    
+    for i in range (1,len(ZE16)):
+        dW=Wiener[i*jump[4]]-Wiener[(i-1)*jump[4]]
+        ZE16[i]=step_e(ZE16[i-1],H,dt*jump[4],dW)
+        ZM16[i]=step_m(ZM16[i-1],H,dt*jump[4],dW)
+    
+    for i in range (1,len(ZE32)):
+        dW=Wiener[i*jump[5]]-Wiener[(i-1)*jump[5]]
+        ZE32[i]=step_e(ZE32[i-1],H,dt*jump[5],dW)
+        ZM32[i]=step_m(ZM32[i-1],H,dt*jump[5],dW)
+    
+    return ZE1, ZE2, ZE4, ZE8, ZE16, ZE32, TimeArray
+    
+def get_error():
+    
+    TimeEnd=100
+    jump=np.array([1,2,4,8,16,32]) 
+    Nt=100*jump[-1]
+    
+    TimeArray=np.linspace(0,TimeEnd,Nt)
+    dt=TimeArray[1]-TimeArray[0]
     dW=np.random.normal(0,dt,Nt)
     Wiener=np.cumsum(dW)
     
@@ -146,6 +216,21 @@ def get_error():
     
     return np.abs(Error_e),np.abs(Error_m),dt
 #%%
+    
+ZE1, ZE2, ZE4, ZE8, ZE16, ZE32, TimeArray=get_tranjectory()
+
+fig=plt.figure()
+plt.plot(TimeArray,ZE1, label="Euler 1 time step")
+plt.plot(TimeArray[0::32],ZE32, label="Euler 32 time steps")
+plt.xlabel("Time (s)")
+plt.ylabel("Particle position (m)")
+plt.legend()
+
+
+
+
+#%%
+"""
 Np=100
 
 Error_e, Error_m,dt=get_error()
@@ -177,3 +262,4 @@ plt.legend()
 plt.axis('equal')
 plt.savefig("figure")
 
+"""
