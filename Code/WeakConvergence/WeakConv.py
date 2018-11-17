@@ -22,7 +22,7 @@ H=25.0
 K0=5e-3
 K1=1e-3
 turncation=H/2
-scale=0.05
+scale=1
 
 sym_Diffu = K0+(K1-K0)*(1-1/(1+sympy.exp(-(turncation-z)/scale)))
 sym_dKdz = sympy.diff(sym_Diffu, z, 1)
@@ -37,10 +37,6 @@ d3Kdz = sympy.utilities.lambdify(z,sym_d3Kdz3,np)
 del z #delete the symbol
 
 print("Sympy finished")
-
-z=np.linspace(0,25,1000)
-profile=Diffu(z)
-plt.plot(z,profile)
 
 
 #%%
@@ -101,9 +97,20 @@ def step_e(z,H,dt,N_sample,w=0):
 def step_m(z,H,dt,N_sample,dW=None,w=0):
     if dW is None:
         dW=np.random.normal(0,np.sqrt(dt),N_sample)
+    
+    
+    k=Diffu(z)
     dkdz=dKdz(z)
-    b=np.sqrt(2*Diffu(z))
-    temp= z + w*dt + (1/2)*dkdz*(dW*dW+dt) + b*dW
+    sqrt2k=np.sqrt(2*k)
+    
+    a= w + dkdz
+    b= sqrt2k 
+    db=dkdz/b
+    
+    
+    #temp= z + w*dt + (1/2)*dkdz*(dW*dW+dt) + b*dW
+    temp= z+ a*dt+b*dt+1/2*(b*db)*(dW**2-dt)
+    
     temp=np.where(temp<0, -temp ,temp)
     temp=np.where(temp>H, 2*H-temp,temp)
     return temp
@@ -145,14 +152,14 @@ def Lagrangian(H=None, dtLa=None, T=None, Np=None, mu=None, sigma=None):
     print("Number of particles: ", Np)
     print("dt of Lagrangian: ", dtLa)
     for i in range(Nt):
+        print("\r","Working: ", i, " of ", Nt, end="\r", flush=True)       
         LaM2=step_m2(LaM2,H,dtLa,Np)
         LaEM=step_e(LaEM,H,dtLa,Np)
         LaVi=step_v(LaVi,H,dtLa,Np)
         LaM1=step_m(LaM1,H,dtLa,Np)
+
         
-#        if (i % int(Nt/100) ==0): #Just for printing
-#            print("\r", float(i*100/Nt+1),"%", end="\r",flush=True)
-#    print("\n")
+    
     """
     1. Calculate the "$order" momentum of Eulerian.
     2. Calculate the "$order" momentum of Lagrangian.
@@ -190,8 +197,7 @@ def Eulerain(dz=None, H=None, dtEu=None, T=None, mu=None, sigma=None):
             print("\r", float(i*100/Nt+1),"%", end="\r",flush=True)
     print("\n")
     
-    plt.plot(zEu,Conc)
-    plt.show()
+    plt.plot(zEu,Conc,".")
     order=1
     momConc=np.sum(Conc*zEu**order)*dz
     np.save("Concentration", Conc)
@@ -200,14 +206,14 @@ def Eulerain(dz=None, H=None, dtEu=None, T=None, mu=None, sigma=None):
 """    
 Run
 """
-#z=np.linspace(0,25, 200)
-#D=Diffu(z)
-#plt.plot(z,D)
-
+z=np.linspace(0,25, 2000)
+D=Diffu(z)
+plt.plot(z,D,"*")
+plt.show()
 
 #input parameters.
 dz=0.1
-dtEu=0.5
+dtEu=0.1
 T=12*3600 #one hours
 Np=2000000             #Number of particles
 mu=10.0

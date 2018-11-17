@@ -65,6 +65,7 @@ def get_tranjectory():
     Nt=100*jump[-1]+1
     
     TimeArray=np.linspace(0,TimeEnd,Nt)
+    print("TimeArray size: ", TimeArray.size)
     dt=TimeArray[1]-TimeArray[0]
     dW=np.random.normal(0,dt,Nt)
     Wiener=np.cumsum(dW)
@@ -136,6 +137,7 @@ def get_error():
     Nt=100*jump[-1]+1
     
     TimeArray=np.linspace(0,TimeEnd,Nt)
+    #print("TimeArray size: ", TimeArray.size)
     dt=TimeArray[1]-TimeArray[0]
     dW=np.random.normal(0,dt,Nt)
     Wiener=np.cumsum(dW)
@@ -235,7 +237,8 @@ for i in range(1,Np):
     temp_e,temp_m,_=get_error()
     Error_e=temp_e+Error_e
     Error_m=temp_m+Error_m
-    print((i+1)*100/Np, "%")
+    print("\r ", (i+1)*100/Np, "%", end="\r",flush=True)
+
     
 Error_e=Error_e/Np
 Error_m=Error_m/Np

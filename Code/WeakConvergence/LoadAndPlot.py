@@ -24,22 +24,22 @@ l, = plt.plot(dtLa_array, weak_conEM,".",label = "Euler_Ma")
 plt.plot(dtLa_array, (weak_conEM[i]/dtLa_array[i]**1) * dtLa_array**1, "--",
          c = l.get_color(), label = "$\sim \Delta t^1$", alpha=0.3)
 
-l, = plt.plot(dtLa_array, weak_conM2,"*",label = "Milstein_2nd")
-plt.plot(dtLa_array, (weak_conM2[i]/dtLa_array[i]**2) * dtLa_array**2, "--", 
-         c = l.get_color(), label = "$\sim \Delta t^2$", alpha=0.3)
-
 l, = plt.plot(dtLa_array, weak_conVi,".",label = "Visser")
 plt.plot(dtLa_array, (weak_conVi[i]/dtLa_array[i]**1) * dtLa_array**1, "--",
          c = l.get_color(), label = "$\sim \Delta t^1$", alpha=0.3)
 
-#l, = plt.plot(dtLa_array, weak_conM1,".",label = "Milstein_1st")
-#plt.plot(dtLa_array, (weak_conM1[i]/dtLa_array[i]**1) * dtLa_array**1, "--",
-#         c = l.get_color(), label = "$\sim \Delta t^1$", alpha=0.3)
+l, = plt.plot(dtLa_array, weak_conM1,".",label = "Milstein_1st")
+plt.plot(dtLa_array, (weak_conM1[i]/dtLa_array[i]**1) * dtLa_array**1, "--",
+         c = l.get_color(), label = "$\sim \Delta t^1$", alpha=0.3)
+
+l, = plt.plot(dtLa_array, weak_conM2,"*",label = "Milstein_2nd")
+plt.plot(dtLa_array, (weak_conM2[i]/dtLa_array[i]**2) * dtLa_array**2, "--", 
+         c = l.get_color(), label = "$\sim \Delta t^2$", alpha=0.3)
 
 plt.xlabel('dt (s)')
 plt.ylabel('Absolute error')
 plt.xscale('log')
 plt.yscale('log')
 plt.legend()
-plt.axis('equal')
+#plt.axis('equal')
 plt.savefig("figure")
