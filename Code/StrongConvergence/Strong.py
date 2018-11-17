@@ -62,7 +62,7 @@ def step_e(z,H,dt,dW,w=0):
 def get_tranjectory():
     TimeEnd=10000
     jump=np.array([1,2,4,8,16,32]) 
-    Nt=100*jump[-1]
+    Nt=100*jump[-1]+1
     
     TimeArray=np.linspace(0,TimeEnd,Nt)
     dt=TimeArray[1]-TimeArray[0]
@@ -70,18 +70,18 @@ def get_tranjectory():
     Wiener=np.cumsum(dW)
     
     ZE1=np.zeros(len(dW))
-    ZE2=np.zeros(int(len(dW)/2))
-    ZE4=np.zeros(int(len(dW)/4))
-    ZE8=np.zeros(int(len(dW)/8))
-    ZE16=np.zeros(int(len(dW)/16))
-    ZE32=np.zeros(int(len(dW)/32))
+    ZE2=np.zeros(int(len(dW)/2)+1)
+    ZE4=np.zeros(int(len(dW)/4)+1)
+    ZE8=np.zeros(int(len(dW)/8)+1)
+    ZE16=np.zeros(int(len(dW)/16)+1)
+    ZE32=np.zeros(int(len(dW)/32)+1)
     
     ZM1=np.zeros(len(dW))
-    ZM2=np.zeros(int(len(dW)/2))
-    ZM4=np.zeros(int(len(dW)/4))
-    ZM8=np.zeros(int(len(dW)/8))
-    ZM16=np.zeros(int(len(dW)/16))
-    ZM32=np.zeros(int(len(dW)/32))
+    ZM2=np.zeros(int(len(dW)/2)+1)
+    ZM4=np.zeros(int(len(dW)/4)+1)
+    ZM8=np.zeros(int(len(dW)/8)+1)
+    ZM16=np.zeros(int(len(dW)/16)+1)
+    ZM32=np.zeros(int(len(dW)/32)+1)
    
     ZE1[0]=17
     ZE2[0]=17
@@ -133,7 +133,7 @@ def get_error():
     
     TimeEnd=100
     jump=np.array([1,2,4,8,16,32]) 
-    Nt=100*jump[-1]
+    Nt=100*jump[-1]+1
     
     TimeArray=np.linspace(0,TimeEnd,Nt)
     dt=TimeArray[1]-TimeArray[0]
@@ -141,18 +141,18 @@ def get_error():
     Wiener=np.cumsum(dW)
     
     ZE1=np.zeros(len(dW))
-    ZE2=np.zeros(int(len(dW)/2))
-    ZE4=np.zeros(int(len(dW)/4))
-    ZE8=np.zeros(int(len(dW)/8))
-    ZE16=np.zeros(int(len(dW)/16))
-    ZE32=np.zeros(int(len(dW)/32))
+    ZE2=np.zeros(int(len(dW)/2)+1)
+    ZE4=np.zeros(int(len(dW)/4)+1)
+    ZE8=np.zeros(int(len(dW)/8)+1)
+    ZE16=np.zeros(int(len(dW)/16)+1)
+    ZE32=np.zeros(int(len(dW)/32)+1)
     
     ZM1=np.zeros(len(dW))
-    ZM2=np.zeros(int(len(dW)/2))
-    ZM4=np.zeros(int(len(dW)/4))
-    ZM8=np.zeros(int(len(dW)/8))
-    ZM16=np.zeros(int(len(dW)/16))
-    ZM32=np.zeros(int(len(dW)/32))
+    ZM2=np.zeros(int(len(dW)/2)+1)
+    ZM4=np.zeros(int(len(dW)/4)+1)
+    ZM8=np.zeros(int(len(dW)/8)+1)
+    ZM16=np.zeros(int(len(dW)/16)+1)
+    ZM32=np.zeros(int(len(dW)/32)+1)
    
     ZE1[0]=17
     ZE2[0]=17
@@ -202,21 +202,21 @@ def get_error():
     Error_e=np.zeros(len(jump)-1)
     Error_m=np.zeros(len(jump)-1)
     
-    Error_e[0]=ZE1[-1*jump[1]]-ZE2[-1]
-    Error_e[1]=ZE1[-1*jump[2]]-ZE4[-1]
-    Error_e[2]=ZE1[-1*jump[3]]-ZE8[-1]
-    Error_e[3]=ZE1[-1*jump[4]]-ZE16[-1]
-    Error_e[4]=ZE1[-1*jump[5]]-ZE32[-1]
+    Error_e[0]=ZE1[-1]-ZE2[-1]
+    Error_e[1]=ZE1[-1]-ZE4[-1]
+    Error_e[2]=ZE1[-1]-ZE8[-1]
+    Error_e[3]=ZE1[-1]-ZE16[-1]
+    Error_e[4]=ZE1[-1]-ZE32[-1]
     
-    Error_m[0]=ZM1[-1*jump[1]]-ZM2[-1]
-    Error_m[1]=ZM1[-1*jump[2]]-ZM4[-1]
-    Error_m[2]=ZM1[-1*jump[3]]-ZM8[-1]
-    Error_m[3]=ZM1[-1*jump[4]]-ZM16[-1]
-    Error_m[4]=ZM1[-1*jump[5]]-ZM32[-1]
+    Error_m[0]=ZM1[-1]-ZM2[-1]
+    Error_m[1]=ZM1[-1]-ZM4[-1]
+    Error_m[2]=ZM1[-1]-ZM8[-1]
+    Error_m[3]=ZM1[-1]-ZM16[-1]
+    Error_m[4]=ZM1[-1]-ZM32[-1]
     
     return np.abs(Error_e),np.abs(Error_m),dt
 #%%
-    
+"""
 ZE1, ZE2, ZE4, ZE8, ZE16, ZE32, TimeArray=get_tranjectory()
 
 fig=plt.figure()
@@ -225,19 +225,17 @@ plt.plot(TimeArray[0::32],ZE32, label="Euler 32 time steps")
 plt.xlabel("Time (s)")
 plt.ylabel("Particle position (m)")
 plt.legend()
-
-
-
-
-#%%
 """
-Np=100
+#%%
+
+Np=2000
 
 Error_e, Error_m,dt=get_error()
 for i in range(1,Np):
     temp_e,temp_m,_=get_error()
     Error_e=temp_e+Error_e
     Error_m=temp_m+Error_m
+    print((i+1)*100/Np, "%")
     
 Error_e=Error_e/Np
 Error_m=Error_m/Np
@@ -254,12 +252,10 @@ plt.plot(dtArray, (Error_m[i]/dtArray[i]**1) * dtArray**1, "--",
          c = l.get_color(), label = "$\sim \Delta t^1$", alpha=0.3)
 
 
-plt.xlabel('dt (s)')
-plt.ylabel('Mean absolute error')
+plt.xlabel('$\Delta t$ (s)')
+plt.ylabel('Mean absolute error (m)')
 plt.xscale('log')
 plt.yscale('log')
 plt.legend()
-plt.axis('equal')
+#plt.axis('equal')
 plt.savefig("figure")
-
-"""
