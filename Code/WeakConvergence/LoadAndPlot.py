@@ -18,8 +18,8 @@ weak_conVi=np.load("Weak_Vi.npy")
 weak_conM1=np.load("Weak_M1.npy")
 dtLa_array=np.load("dtArray.npy")
 
-i = 4
-
+i = 2
+fig=plt.figure(1)
 l, = plt.plot(dtLa_array, weak_conEM,".",label = "Euler_Ma")
 plt.plot(dtLa_array, (weak_conEM[i]/dtLa_array[i]**1) * dtLa_array**1, "--",
          c = l.get_color(), label = "$\sim \Delta t^1$", alpha=0.3)
@@ -43,3 +43,20 @@ plt.yscale('log')
 plt.legend()
 #plt.axis('equal')
 plt.savefig("figure")
+
+#%%
+"""
+zEu=np.load("zEu.npy")
+Conc=np.load("Concentration.npy")
+midpoints=np.load("midpointsWeakConv.npy")
+hist=np.load("histOfWeakConv.npy")
+
+fig=plt.figure(2)
+
+plt.plot(zEu,Conc, label="Eulerian")   
+plt.plot(midpoints,hist,".",alpha=0.4, label="Lagrangian Milstein 2nd")
+plt.xlabel('Depth (m)')
+plt.ylabel('Concentration')
+plt.legend()
+"""
+

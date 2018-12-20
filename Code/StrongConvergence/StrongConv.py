@@ -10,10 +10,7 @@ from matplotlib import pyplot as plt
 plt.style.use('bmh')
 import numpy as np
 import sympy
-import sys  #Use this to abort if the condition is not right.
-from time import time
-#from numba import jit, njit, prange
-#import numba
+
 #%%
 sympy.init_printing()
 
@@ -218,20 +215,22 @@ def get_error():
     
     return np.abs(Error_e),np.abs(Error_m),dt
 #%%
-"""
+#Part 1 Get tranjectory plot
+    
 ZE1, ZE2, ZE4, ZE8, ZE16, ZE32, TimeArray=get_tranjectory()
 
 fig=plt.figure()
-plt.plot(TimeArray,ZE1, label="Euler 1 time step")
-plt.plot(TimeArray[0::32],ZE32, label="Euler 32 time steps")
+plt.plot(TimeArray,ZE1, label="E1 scheme: $\Delta t=\Delta t_0$")
+plt.plot(TimeArray[0::32],ZE32, label="E1 scheme: $\Delta t=32*\Delta t_0$")
 plt.xlabel("Time (s)")
 plt.ylabel("Particle position (m)")
 plt.legend()
-"""
+plt.tight_layout()
+
 #%%
-
+#Part 2 Calculate strong convergence
+"""
 Np=2000
-
 Error_e, Error_m,dt=get_error()
 for i in range(1,Np):
     temp_e,temp_m,_=get_error()
@@ -262,3 +261,4 @@ plt.yscale('log')
 plt.legend()
 #plt.axis('equal')
 plt.savefig("figure")
+"""

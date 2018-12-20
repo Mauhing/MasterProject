@@ -137,9 +137,8 @@ print("Number of time step: ", Ntp)
 print("Number of particles: ", Np)
 for i in range(Ntp):
     particles=step_m2(particles,H,dtLa,Np)    
-#    if (i % int(Ntp/100) ==0): #Just for printing
-#        print("\r", int(i*100/Ntp+1),"%", end="\r",flush=True)
-#print("\n")
+    print("\r",i," of ",Ntp, end="\r", flush=True)
+
 
 hist,_=np.histogram(particles, bins=bins)
 midpoints=bins[0:-1]+(bins[1]-bins[0])/2
